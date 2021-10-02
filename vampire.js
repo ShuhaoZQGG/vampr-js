@@ -58,7 +58,109 @@ class Vampire {
     }
     return currentVampire;
   }
-}
 
+  // Returns the vampire object with that name, or null if no vampire exists with that name
+  vampireWithName(name) {
+    let vampire = null;
+
+    if (this.name === name) {
+      vampire = this;
+      return vampire;
+    }
+    
+    for (const offspring of this.offspring) {
+      vampire = offspring.vampireWithName(name);
+
+      if (vampire !== null) {
+        return vampire;
+      }
+    }
+
+    return vampire;
+  }
+
+  // Returns the total number of vampires that exist
+  get totalDescendents() {
+    let currentVampire = this;
+    let number = 1;
+
+    
+    for (const offspring of this.offspring) {
+      currentVampire = offspring;
+      if (currentVampire){
+        number += currentVampire.totalDescendents;
+      }
+    }
+
+    return number;
+  }
+
+  // Returns an array of all the vampires that were converted after 1980
+  get allMillennialVampires() {
+    let newBornVampires = [];
+    let currentVampire = this;
+    if (currentVampire.yearConverted > 1980) {
+      newBornVampires.push(currentVampire);
+    }
+
+    for (const offspring of currentVampire.offspring) {
+      currentVampire = offspring;
+      if (currentVampire.allMillennialVampires.length > 0){
+        newBornVampires.push(currentVampire.allMillennialVampires);
+      }
+    }
+
+    return newBornVampires;
+  }
+}
+  let rootVampire = new Vampire("root");
+  rootVampire.yearConverted = 1900
+
+
+  let offspringA = new Vampire("a");
+  offspringA.yearConverted = 1925;
+  let offspringB = new Vampire("b");
+  offspringB.yearConverted = 1950;
+  let offspringC = new Vampire("c");
+  offspringC.yearConverted = 1981;
+  let offspringD = new Vampire("d");
+  offspringD.yearConverted = 1990;
+  let offspringE = new Vampire("e");
+  offspringE.yearConverted = 1995;
+  let offspringF = new Vampire("F");
+  offspringF.yearConverted = 1990;
+  let offspringG = new Vampire("G");
+  offspringG.yearConverted = 1990;
+  let offspringH = new Vampire("h");
+  offspringH.yearConverted = 1991;
+
+  rootVampire.addOffspring(offspringA);
+  rootVampire.addOffspring(offspringB);
+  rootVampire.addOffspring(offspringC);
+  offspringA.addOffspring(offspringF);
+  offspringB.addOffspring(offspringG);
+  offspringC.addOffspring(offspringD);
+  offspringC.addOffspring(offspringE);
+  offspringB.addOffspring(offspringH);
+  //console.log((rootVampire));
+ // console.log(rootVampire.vampireWithName("a"));
+  console.log("--------");
+  console.log(rootVampire.vampireWithName("b"));
+  console.log("--------");
+  console.log(rootVampire.vampireWithName("c"));
+  console.log("--------");
+  console.log(rootVampire.totalDescendents);
+  console.log("--------");
+  console.log(offspringA.totalDescendents);
+  console.log("--------");
+  console.log(offspringC.totalDescendents);
+  console.log("--------");
+  console.log(offspringH.totalDescendents);
+  console.log("--------");
+  console.log(rootVampire.allMillennialVampires);
+  console.log("--------");
+  console.log(offspringB.allMillennialVampires);
+  console.log("--------");
+  console.log(offspringC.allMillennialVampires);
 module.exports = Vampire;
 
